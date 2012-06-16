@@ -8,8 +8,11 @@ var Controller = function () {
   this.room = null;
 };
 
-Controller.prototype.connectToRoom = function (queueUri, rid) {
+Controller.prototype.setQueuePlaylist = function (queueUri) {
   this.lq   = new LocalQueue(queueUri);
+};
+
+Controller.prototype.connectToRoom = function (rid) {
   this.room = new Room(_.bind(this.onRoomLoaded, this), rid);
   this.isPlaying = false;
   this.currentTrack = null;
@@ -61,7 +64,12 @@ Controller.prototype.onLocalSongEnd = function () {
 };
 
 Controller.prototype.sendNextTrack = function (track) {
-  console.log(track.data.uri);
+  var uri = null;
+  if (track && track.data) {
+    uri = track.data.uri;
+  }
+
+  console.log("Sending track to server: " + uri);
   /*
   var req = new XMLHttpRequest();
   req.open("GET", "http://ws.audioscrobbler.com/2.0/?method=geo.getevents&location=" + city + "&api_key=YOUR_KEY_HERE", true);

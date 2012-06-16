@@ -17,7 +17,7 @@ LocalQueue.prototype.onLocalQueueChange = function () {
 
 LocalQueue.prototype.popSong = function () {
   try {
-    var track = this.pl.get(this.iPos);
+    var track = this.pl.get(this.iPos++);
     return track;
   } catch (err) {
     return null;

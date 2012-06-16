@@ -21,16 +21,10 @@ Room.prototype.isOwnTurn = function () {
   return this.idCurrPerson === this.idSelf;
 };
 
-Room.prototype.getNewRoom = function (onRoomLoaded) {
-  // TODO: do a remote call or whatever
-  this.rid = 1;
-  onRoomLoaded();
-};
-
 Room.prototype.connectToRoom = function (rid, onRoomLoaded) {
   this.rid = rid;
 
-  // TODO: do a remote call for our rid
+  // TODO: do a remote call to connect to our rid
   onRoomLoaded();
 };
 
@@ -49,6 +43,13 @@ Room.prototype.onTurnChange = function (data) {
   }
   this.notify(Room.TURN_CHANGE, data.userData);
 };
+
+
+Room.MakeNew = function (onRoomCreated) {
+  // TODO: do a remote call or whatever
+  onRoomCreated(1);
+};
+
 
 Room.OUR_TURN = "ourTurn";
 Room.TURN_CHANGE= "TurnChange";

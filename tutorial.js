@@ -1,12 +1,20 @@
 var sp = getSpotifyApi(1);
 var models = sp.require('sp://import/scripts/api/models');
 var Controller = sp.require('controller').Controller;
+var Room = sp.require('room').Room;
 
 exports.init = init;
 
 var controller = new Controller();
 
+var PLAYLIST_KEY = "uPlaylist";
+
 function init() {
+
+  var uStoredPlaylist = localStorage[PLAYLIST_KEY];
+  if (uStoredPlaylist) {
+    onPlaylistLoaded(uStoredPlaylist);
+  }
 
   var drop = document.querySelector('#friend-drop');
   drop.addEventListener('dragenter', handleDragEnter, false);
@@ -30,7 +38,7 @@ function init() {
   function handleDrop(e) {
     this.style.background = '#333333';
     var uri = e.dataTransfer.getData('Text');
-    controller.connectToRoom(uri);
+    onPlaylistLoaded(uri);
   }
 
   /*
@@ -42,6 +50,16 @@ function init() {
 		}
 	});
 	*/
+}
+
+function onPlaylistLoaded(uri) {
+  localStorage[PLAYLIST_KEY] = uri;
+  controller.setQueuePlaylist(uri);
+  Room.MakeNew(onNewRoom);
+}
+
+function onNewRoom(rid) {
+  controller.connectToRoom(rid);
 }
 
 exports.controller = controller;
